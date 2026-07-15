@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="el">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}LearnCode{% endblock %}</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+
+    <div class="container">
+
+        <a class="navbar-brand" href="/">
+            💻 LearnCode
+        </a>
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <ul class="navbar-nav ms-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Αρχική</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Μαθήματα</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Ασκήσεις</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Βίντεο</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Επικοινωνία</a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<div class="container mt-5">
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+<footer class="bg-dark text-white text-center p-4 mt-5">
+
+    © 2025 LearnCode
+
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Το <script> χρησιμοποιείται για να βάλεις ή να φορτώσεις JavaScript κώδικα στη σελίδα σου.
+    ο src σημαίνει: “Φόρτωσε εξωτερικό αρχείο JavaScript από αυτό το link”-->
+
+</body>
+
+</html>

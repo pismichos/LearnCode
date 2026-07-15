@@ -1,0 +1,41 @@
+.hero{
+    padding:100px 0;
+}
+
+.hero h1{
+
+    font-size:3.8rem;
+
+    font-weight:700;
+
+    line-height:1.2;
+
+    color:#2563EB;
+
+}
+
+.hero p{
+
+    font-size:1.2rem;
+
+    color:#555;
+
+}
+
+.btn{
+
+    border-radius:12px;
+
+    padding:12px 25px;
+
+    margin-right:10px;
+
+}
+
+.badge{
+
+    font-size:1rem;
+
+    padding:10px 15px;
+
+}
