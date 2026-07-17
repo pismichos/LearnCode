@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+Μαθήματα
+{% endblock %}
+
+{% block content %}
+
+<h1 class="mb-4">📚 Τα Μαθήματα</h1>
+{% if courses %}
+    {% for course in courses %}
+
+        <div class="card mb-3">
+
+            <div class="card-body">
+
+                <h3>{{ course.title }}</h3>
+
+                <p>{{ course.description }}</p>
+
+            </div>
+
+        </div>
+
+    {% endfor %}
+{% else %}
+<p>Δεν υπάρχουν ακόμη διαθέσιμα μαθήματα.</p>
+{% endif %}
+{% endblock %}
