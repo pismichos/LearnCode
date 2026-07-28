@@ -39,3 +39,23 @@
     padding:10px 15px;
 
 }
+
+/* -----------------------------
+   Navigation
+------------------------------ */
+
+.navbar .nav-link {
+    color: #ffffff;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.navbar .nav-link:hover {
+    color: #0d6efd;
+}
+
+.navbar .nav-link.active {
+    color: #0d6efd !important;
+    font-weight: bold;
+    border-bottom: 3px solid #0d6efd;
+}

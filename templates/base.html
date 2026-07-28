@@ -45,11 +45,16 @@
             <ul class="navbar-nav ms-auto">
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Αρχική</a>
+                    <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">
+                        Αρχική
+                    </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'course_list' %}">Μαθήματα</a>
+                    <a class="nav-link {% if '/courses/' in request.path %}active{% endif %}"
+                    href="{% url 'course_list' %}">
+                        Μαθήματα
+                    </a>
                 </li>
 
                 <li class="nav-item">
