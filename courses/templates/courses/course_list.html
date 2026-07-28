@@ -1,29 +1,70 @@
 {% extends "base.html" %}
 
 {% block title %}
-Μαθήματα
+Μαθήματα | LearnCode
 {% endblock %}
 
 {% block content %}
 
-<h1 class="mb-4">📚 Τα Μαθήματα</h1>
-{% if courses %}
-    {% for course in courses %}
+<section class="py-5">
 
-        <div class="card mb-3">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold">Τα Μαθήματά μας</h1>
 
-            <div class="card-body">
+        <p class="text-muted">
+            Επίλεξε το μάθημα που σε ενδιαφέρει και ξεκίνα να μαθαίνεις.
+        </p>
+    </div>
 
-                <h3>{{ course.title }}</h3>
+    {% if courses %}
 
-                <p>{{ course.description }}</p>
+        <div class="row g-4">
 
-            </div>
+            {% for course in courses %}
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="card h-100 shadow-sm">
+
+                        <div class="card-body d-flex flex-column">
+
+                            <h3 class="card-title h5">
+                                {{ course.title }}
+                            </h3>
+
+                            <span class="badge bg-primary align-self-start mb-3">
+                                {{ course.get_level_display }}
+                            </span>
+
+                            <p class="card-text text-muted">
+                                {{ course.description|truncatewords:20 }}
+                            </p>
+
+                            <a
+                                href="{% url 'course_detail' course.slug %}"
+                                class="btn btn-outline-primary mt-auto"
+                            >
+                                Προβολή μαθήματος
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
 
         </div>
 
-    {% endfor %}
-{% else %}
-<p>Δεν υπάρχουν ακόμη διαθέσιμα μαθήματα.</p>
-{% endif %}
+    {% else %}
+
+        <div class="alert alert-info text-center">
+            Δεν υπάρχουν ακόμη διαθέσιμα μαθήματα.
+        </div>
+
+    {% endif %}
+
+</section>
+
 {% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ course.title }} | LearnCode
+{% endblock %}
+
+{% block content %}
+
+<section class="py-5">
+
+    <a
+        href="{% url 'course_list' %}"
+        class="text-decoration-none"
+    >
+        ← Επιστροφή στα μαθήματα
+    </a>
+
+    <div class="mt-4">
+
+        <span class="badge bg-primary mb-3">
+            {{ course.get_level_display }}
+        </span>
+
+        <h1 class="fw-bold">
+            {{ course.title }}
+        </h1>
+
+        <p class="lead text-muted mt-3">
+            {{ course.description }}
+        </p>
+
+    </div>
+
+</section>
+
+{% endblock %}

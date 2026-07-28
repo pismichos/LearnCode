@@ -1,16 +1,34 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from .models import Course
 
 
 def course_list(request):
-    courses = Course.objects.filter()
+    courses = Course.objects.filter(published=True)
 
     context = {
-        "courses": courses
+        "courses": courses,
     }
 
     return render(
         request,
         "courses/course_list.html",
-        context
+        context,
+    )
+
+
+def course_detail(request, slug):
+    course = get_object_or_404(
+        Course,
+        slug=slug,
+        published=True,
+    )
+
+    context = {
+        "course": course,
+    }
+
+    return render(
+        request,
+        "courses/course_detail.html",
+        context,
     )
