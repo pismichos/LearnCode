@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ lesson.title }} | LearnCode
+{% endblock %}
+
+{% block content %}
+
+<section class="py-5">
+
+    <a
+        href="{% url 'course_detail' lesson.course.slug %}"
+        class="text-decoration-none"
+    >
+        ← Επιστροφή στο {{ lesson.course.title }}
+    </a>
+
+    <div class="mt-4">
+
+        <p class="text-primary fw-semibold mb-2">
+            {{ lesson.course.title }}
+        </p>
+
+        <h1 class="fw-bold">
+            {{ lesson.order }}. {{ lesson.title }}
+        </h1>
+
+        <hr class="my-4">
+
+        <div class="lesson-content">
+            {{ lesson.content|linebreaks }}
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render
-from .models import Course
+from .models import Course, Lesson
 
 
 def course_list(request):
@@ -30,5 +30,24 @@ def course_detail(request, slug):
     return render(
         request,
         "courses/course_detail.html",
+        context,
+    )
+
+def lesson_detail(request, course_slug, lesson_slug):
+    lesson = get_object_or_404(
+        Lesson,
+        course__slug=course_slug,
+        slug=lesson_slug,
+        published=True,
+        course__published=True,
+    )
+
+    context = {
+        "lesson": lesson,
+    }
+
+    return render(
+        request,
+        "courses/lesson_detail.html",
         context,
     )

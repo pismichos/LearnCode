@@ -50,6 +50,12 @@
                         <h5 class="card-title mb-2">
                             {{ lesson.order }}. {{ lesson.title }}
                         </h5>
+                         <a
+                            href="{% url 'lesson_detail' course.slug lesson.slug %}"
+                            class="btn btn-outline-primary mt-2"
+                        >
+                            Άνοιγμα ενότητας
+                        </a>
 
                         <p class="text-muted mb-0">
                             Επιμέρους μάθημα
