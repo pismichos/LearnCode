@@ -21,6 +21,10 @@
             {{ lesson.course.title }}
         </p>
 
+        <p class="text-muted mb-4">
+            ⏱️ Διάρκεια: {{ lesson.duration }} λεπτά
+        </p>
+
         <h1 class="fw-bold">
             {{ lesson.order }}. {{ lesson.title }}
         </h1>
@@ -29,6 +33,42 @@
 
         <div class="lesson-content">
             {{ lesson.content|linebreaks }}
+        </div>
+
+        <hr class="my-5">
+
+        <div class="d-flex justify-content-between">
+
+            <div>
+
+                {% if previous_lesson %}
+
+                    <a
+                        href="{% url 'lesson_detail' lesson.course.slug previous_lesson.slug %}"
+                        class="btn btn-outline-secondary"
+                    >
+                        ← {{ previous_lesson.title }}
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+            <div>
+
+                {% if next_lesson %}
+
+                    <a
+                        href="{% url 'lesson_detail' lesson.course.slug next_lesson.slug %}"
+                        class="btn btn-primary"
+                    >
+                        {{ next_lesson.title }} →
+                    </a>
+
+                {% endif %}
+
+            </div>
+
         </div>
 
     </div>

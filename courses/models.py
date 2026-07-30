@@ -44,6 +44,14 @@ class Lesson(models.Model):
     content = models.TextField()
     order = models.PositiveIntegerField(default=1)
     published = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)\
+
+    duration = models.PositiveIntegerField(
+    default=0,
+    help_text="Διάρκεια σε λεπτά"
+    )
+
+    published = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

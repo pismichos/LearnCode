@@ -34,6 +34,7 @@ def course_detail(request, slug):
     )
 
 def lesson_detail(request, course_slug, lesson_slug):
+
     lesson = get_object_or_404(
         Lesson,
         course__slug=course_slug,
@@ -42,8 +43,22 @@ def lesson_detail(request, course_slug, lesson_slug):
         course__published=True,
     )
 
+    previous_lesson = Lesson.objects.filter(
+        course=lesson.course,
+        published=True,
+        order__lt=lesson.order,
+    ).order_by("-order").first()
+
+    next_lesson = Lesson.objects.filter(
+        course=lesson.course,
+        published=True,
+        order__gt=lesson.order,
+    ).order_by("order").first()
+
     context = {
         "lesson": lesson,
+        "previous_lesson": previous_lesson,
+        "next_lesson": next_lesson,
     }
 
     return render(
