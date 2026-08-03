@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %} Σύνδεση {% endblock %}
+
+{% block content %}
+    <section class="py-5">
+        <div class="container" style="max-width: 400px;">
+        <h1 class ="mb-4">Σύνδεση</h1>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Σύνδεση</button>
+        </form>
+        </div>
+    </section>
+{% endblock %}
