@@ -27,7 +27,7 @@
 
     <div class="container">
 
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="{% url 'home' %}">         
             💻 LearnCode
         </a>
 
@@ -68,6 +68,50 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Επικοινωνία</a>
                 </li>
+
+                {% if user.is_authenticated %}
+
+                    <li class="nav-item">
+                        <a
+                            class="nav-link {% if '/accounts/profile/' in request.path %}active{% endif %}"
+                            href="{% url 'profile' %}"
+                        >
+                            👤 {{ user.username }}
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+
+                        <form
+                            method="post"
+                            action="{% url 'logout' %}"
+                            class="d-inline"
+                        >
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="btn btn-link nav-link"
+                            >
+                                Αποσύνδεση
+                            </button>
+
+                        </form>
+
+                    </li>
+
+                {% else %}
+
+                    <li class="nav-item">
+                        <a
+                            class="nav-link {% if '/accounts/login/' in request.path %}active{% endif %}"
+                            href="{% url 'login' %}"
+                        >
+                            Σύνδεση
+                        </a>
+                    </li>
+
+                {% endif %}
 
             </ul>
 

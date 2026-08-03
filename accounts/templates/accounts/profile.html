@@ -5,9 +5,16 @@
     <section class="py-5">
         <h1>Το προφιλ μου</h1>
 
+        <p class="lead">Καλώς ήρθατε, {{ user.username }}!</p>
+
+        <p>Email: {{ user.email|default:"Δεν έχει καθοριστεί" }}</p>
         <p>
             Εδω θα εμφανιστούν τα του χρήστη
         </p>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Αποσύνδεση</button>
+        </form>
     </section>
 
 {% endblock %}
