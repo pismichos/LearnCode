@@ -31,6 +31,63 @@
 
     </div>
 
+    <div class="mt-4">
+
+        {% if user.is_authenticated %}
+
+            {% if is_enrolled %}
+
+                <div class="alert alert-success">
+                    ✅ Έχεις εγγραφεί σε αυτό το μάθημα.
+                </div>
+
+                <form
+                    method="post"
+                    action="{% url 'unenroll_course' course.slug %}"
+                >
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="btn btn-outline-danger"
+                    >
+                        Απεγγραφή από το μάθημα
+                    </button>
+
+                </form>
+
+            {% else %}
+
+                <form
+                    method="post"
+                    action="{% url 'enroll_course' course.slug %}"
+                >
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Εγγραφή στο μάθημα
+                    </button>
+
+                </form>
+
+            {% endif %}
+
+        {% else %}
+
+            <a
+                href="{% url 'login' %}?next={{ request.path }}"
+                class="btn btn-primary"
+            >
+                Συνδέσου για να εγγραφείς
+            </a>
+
+        {% endif %}
+
+    </div>
+
     <hr class="my-5">
 
     <div>
@@ -50,16 +107,17 @@
                         <h5 class="card-title mb-2">
                             {{ lesson.order }}. {{ lesson.title }}
                         </h5>
-                         <a
+
+                        <p class="text-muted">
+                            Διάρκεια: {{ lesson.duration }} λεπτά
+                        </p>
+
+                        <a
                             href="{% url 'lesson_detail' course.slug lesson.slug %}"
                             class="btn btn-outline-primary mt-2"
                         >
                             Άνοιγμα ενότητας
                         </a>
-
-                        <p class="text-muted mb-0">
-                            Επιμέρους μάθημα
-                        </p>
 
                     </div>
 

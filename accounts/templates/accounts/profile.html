@@ -3,18 +3,47 @@
 
 {% block content %}
     <section class="py-5">
-        <h1>Το προφιλ μου</h1>
+        <h1 class="fw-bold"> Dashboard </h1>
 
         <p class="lead">Καλώς ήρθατε, {{ user.username }}!</p>
 
         <p>Email: {{ user.email|default:"Δεν έχει καθοριστεί" }}</p>
-        <p>
-            Εδω θα εμφανιστούν τα του χρήστη
-        </p>
+       
+        ?<hr> 
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body text-center">
+                        <h3>{{courses_count}}</h3>
+                        <p class="mb-4">Δημοσιευμένα Courses</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body text-center">
+                        <h3>{{lessons_count}}</h3>
+                        <p class="mb-4">Δημοσιευμένα Lessons</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body text-center">
+                        <h3>0</h3>
+                        <p class="'mb-4">Ολοκληρωμένα Courses</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
         <form method="post" action="{% url 'logout' %}">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Αποσύνδεση</button>
         </form>
+        
     </section>
 
 {% endblock %}

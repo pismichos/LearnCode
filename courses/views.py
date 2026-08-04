@@ -1,4 +1,8 @@
-from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
+
+from accounts.models import Enrollment
+
 from .models import Course, Lesson
 
 
@@ -23,8 +27,17 @@ def course_detail(request, slug):
         published=True,
     )
 
+    is_enrolled = False
+
+    if request.user.is_authenticated:
+        is_enrolled = Enrollment.objects.filter(
+            user=request.user,
+            course=course,
+        ).exists()
+
     context = {
         "course": course,
+        "is_enrolled": is_enrolled,
     }
 
     return render(
@@ -33,8 +46,8 @@ def course_detail(request, slug):
         context,
     )
 
-def lesson_detail(request, course_slug, lesson_slug):
 
+def lesson_detail(request, course_slug, lesson_slug):
     lesson = get_object_or_404(
         Lesson,
         course__slug=course_slug,
@@ -65,4 +78,43 @@ def lesson_detail(request, course_slug, lesson_slug):
         request,
         "courses/lesson_detail.html",
         context,
+    )
+
+
+@login_required
+def enroll_course(request, slug):
+    course = get_object_or_404(
+        Course,
+        slug=slug,
+        published=True,
+    )
+
+    if request.method == "POST":
+        Enrollment.objects.get_or_create(
+            user=request.user,
+            course=course,
+        )
+
+    return redirect(
+        "course_detail",
+        slug=course.slug,
+    )
+
+@login_required
+def unenroll_course(request, slug):
+    course = get_object_or_404(
+        Course,
+        slug=slug,
+        published=True,
+    )
+
+    if request.method == "POST":
+        Enrollment.objects.filter(
+            user=request.user,
+            course=course,
+        ).delete()
+
+    return redirect(
+        "course_detail",
+        slug=course.slug,
     )
