@@ -40,6 +40,40 @@
                 <div class="alert alert-success">
                     ✅ Έχεις εγγραφεί σε αυτό το μάθημα.
                 </div>
+                <div class="card shadow-sm mb-4">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between mb-2">
+
+                        <span class="fw-semibold">
+                            Η πρόοδός σου
+                        </span>
+
+                        <span>
+                            {{ completed_lessons }} από {{ total_lessons }} ενότητες
+                        </span>
+
+                    </div>
+
+                    <div
+                        class="progress"
+                        role="progressbar"
+                        aria-valuenow="{{ progress_percentage }}"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                    >
+                        <div
+                            class="progress-bar"
+                            style="width: {{ progress_percentage|default:"0" }}%;"
+                        >
+                            {{ progress_percentage|default:"0" }}%
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
 
                 <form
                     method="post"

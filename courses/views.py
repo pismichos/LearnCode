@@ -29,6 +29,10 @@ def course_detail(request, slug):
     )
 
     is_enrolled = False
+    total_lessons = course.lessons.filter(published=True,).count()
+
+    completed_lessons = 0
+    progress_percentage = 0
 
     if request.user.is_authenticated:
         is_enrolled = Enrollment.objects.filter(
@@ -36,9 +40,22 @@ def course_detail(request, slug):
             course=course,
         ).exists()
 
+    completed_lessons = LessonProgress.objects.filter(
+            user=request.user,
+            lesson__course=course,
+            lesson__published=True,
+            completed=True,
+        ).count()
+
+    if total_lessons > 0:
+        progress_percentage = round(completed_lessons / total_lessons * 100)
+
     context = {
         "course": course,
         "is_enrolled": is_enrolled,
+        "total_lessons": total_lessons,
+        "completed_lessons": completed_lessons,
+        "progress_percentage": progress_percentage,
     }
 
     return render(
