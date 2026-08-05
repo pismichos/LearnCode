@@ -3,7 +3,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from accounts.models import Enrollment
 
-from .models import Course, Lesson
+from .models import Course, Lesson, LessonProgress
+from django.utils import timezone
 
 
 def course_list(request):
@@ -68,10 +69,15 @@ def lesson_detail(request, course_slug, lesson_slug):
         order__gt=lesson.order,
     ).order_by("order").first()
 
+    is_completed = False
+    if request.user.is_authenticated:
+        is_completed = LessonProgress.objects.filter(user=request.user, lesson=lesson, completed=True).exists()
+
     context = {
         "lesson": lesson,
         "previous_lesson": previous_lesson,
         "next_lesson": next_lesson,
+        "is_completed": is_completed,
     }
 
     return render(
@@ -117,4 +123,33 @@ def unenroll_course(request, slug):
     return redirect(
         "course_detail",
         slug=course.slug,
+    )
+
+@login_required
+def complete_lesson(request, course_slug, lesson_slug):
+    lesson = get_object_or_404(
+        Lesson,
+        course__slug=course_slug,
+        slug=lesson_slug,
+        published=True,
+        course__published=True,
+    )
+
+    if request.method == "POST":
+        progress, created = LessonProgress.objects.get_or_create(
+            user=request.user,
+            lesson=lesson,
+        )
+
+        if not progress.completed:
+            progress.completed = True
+            progress.completed_at = timezone.now()
+            progress.save(
+                update_fields=["completed", "completed_at"]
+            )
+
+    return redirect(
+        "lesson_detail",
+        course_slug=lesson.course.slug,
+        lesson_slug=lesson.slug,
     )

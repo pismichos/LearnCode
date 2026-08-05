@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Course, Lesson
+from .models import Course, Lesson, LessonProgress
 
 
 @admin.register(Course)
@@ -53,4 +53,22 @@ class LessonAdmin(admin.ModelAdmin):
     ordering = (
         "course",
         "order",
+    )
+
+@admin.register(LessonProgress)
+class LessonProgressAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        "lesson",
+        "completed",
+        "last_accessed",
+    )
+
+    list_filter = (
+        "completed",
+    )
+
+    search_fields = (
+        "user__username",
+        "lesson__title",
     )

@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.text import slugify
 
+from django.conf import settings
+
 
 class Course(models.Model):
 
@@ -65,3 +67,31 @@ class Lesson(models.Model):
 
     def __str__(self):
         return f"{self.course.title} - {self.title}"
+
+class LessonProgress(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="lesson_progress"
+    )
+
+    lesson = models.ForeignKey(
+        Lesson,
+        on_delete=models.CASCADE,
+        related_name="progress"
+    )
+
+    completed = models.BooleanField(default=False)
+    completed_at = models.DateTimeField(null=True, blank=True)
+    last_accessed = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "lesson"],
+                name="unique_user_lesson_progress"
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.user.username} - {self.lesson.title} - {'Completed' if self.completed else 'In Progress'}"

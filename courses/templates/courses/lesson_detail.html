@@ -34,6 +34,25 @@
         <div class="lesson-content">
             {{ lesson.content|linebreaks }}
         </div>
+        
+        <div class ="mt-4">
+            {% if user.is_authenticated %}
+                {% if is_completed %}
+                    <div class="alert alert-success" role="alert">
+                        Έχετε ολοκληρώσει αυτή την ενότητα!
+                    </div>
+                {% else %}
+                    <form method="post" action = "{% url 'complete_lesson' lesson.course.slug lesson.slug %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">
+                            Ολοκλήρωση Ενότητας
+                        </button>
+                    </form>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'login' %}? next={{ request.path }}" class="btn btn-primary">Συνδεθείτε για να ολοκληρώσετε την ενότητα</a>
+            {% endif %}
+        </div>
 
         <hr class="my-5">
 
