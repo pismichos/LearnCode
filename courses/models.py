@@ -95,3 +95,23 @@ class LessonProgress(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.lesson.title} - {'Completed' if self.completed else 'In Progress'}"
+
+class LessonMaterial(models.Model):
+    lesson = models.ForeignKey(
+        Lesson,
+        on_delete=models.CASCADE,
+        related_name="materials",
+    )
+
+    title = models.CharField(max_length=200)
+
+    file = models.FileField(
+        upload_to="lesson_materials/",
+    )
+
+    uploaded_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    def __str__(self):
+        return f"{self.lesson.title} - {self.title}"

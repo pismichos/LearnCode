@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Πανελλαδικές Πληροφορικής | LearnCode
+{% endblock %}
+
+{% block content %}
+
+<section class="py-5">
+
+    <div class="text-center mb-5">
+
+        <span class="display-5">
+            🎓
+        </span>
+
+        <h1 class="fw-bold mt-3">
+            {{ course.title }}
+        </h1>
+
+        <p class="lead text-muted mx-auto mt-3" style="max-width: 850px;">
+            {{ course.description }}
+        </p>
+
+        <a
+            href="{% url 'home' %}"
+            class="btn btn-outline-primary mt-3"
+        >
+            ← Επιστροφή στην αρχική
+        </a>
+
+    </div>
+
+    <hr class="my-5">
+
+    <div class="mb-4">
+
+        <h2 class="fw-bold">
+            📚 Ενότητες μαθήματος
+        </h2>
+
+        <p class="text-muted">
+            Επίλεξε την ενότητα που θέλεις να μελετήσεις.
+        </p>
+
+    </div>
+
+    <div class="row g-4">
+
+        {% for lesson in lessons %}
+
+            <div class="col-md-6 col-lg-4">
+
+                <a
+                    href="{% url 'lesson_detail' course.slug lesson.slug %}"
+                    class="text-decoration-none text-dark"
+                >
+
+                    <div class="card h-100 shadow-sm">
+
+                        <div class="card-body">
+
+                            <span class="badge bg-primary mb-3">
+                                Ενότητα {{ lesson.order }}
+                            </span>
+
+                            <h3 class="h5 fw-bold">
+                                {{ lesson.title }}
+                            </h3>
+
+                            <p class="text-muted">
+                                ⏱️ Διάρκεια: {{ lesson.duration }} λεπτά
+                            </p>
+
+                            <span class="btn btn-outline-primary">
+                                Άνοιγμα ενότητας
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        {% empty %}
+
+            <div class="col-12">
+
+                <div class="alert alert-info">
+                    Δεν υπάρχουν ακόμη διαθέσιμες ενότητες για το μάθημα.
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

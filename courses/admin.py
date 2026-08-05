@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Course, Lesson, LessonProgress
+from .models import Course, Lesson, LessonProgress, LessonMaterial
 
 
 @admin.register(Course)
@@ -71,4 +71,23 @@ class LessonProgressAdmin(admin.ModelAdmin):
     search_fields = (
         "user__username",
         "lesson__title",
+    )
+
+@admin.register(LessonMaterial)
+class LessonMaterialAdmin(admin.ModelAdmin):
+    list_display = (
+        "title",
+        "lesson",
+        "uploaded_at",
+    )
+
+    list_filter = (
+        "lesson__course",
+        "lesson",
+    )
+
+    search_fields = (
+        "title",
+        "lesson__title",
+        "lesson__course__title",
     )

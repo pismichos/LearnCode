@@ -1,17 +1,67 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from courses.models import Course, Lesson
+from courses.models import Course, Lesson, LessonProgress
+
+from .models import Enrollment
 
 @login_required
 def profile(request):
+    enrollments = Enrollment.objects.filter(
+        user=request.user,
+        course__published=True,
+    ).select_related("course")
 
-    courses_count = Course.objects.filter(published=True).count()
-    lessons_count = Lesson.objects.filter(published=True).count()
+    enrolled_courses = []
+
+    for enrollment in enrollments:
+        course = enrollment.course
+
+        lessons = course.lessons.filter(
+            published=True,
+        )
+
+        total_lessons = lessons.count()
+
+        completed_lesson_ids = LessonProgress.objects.filter(
+            user=request.user,
+            lesson__course=course,
+            lesson__published=True,
+            completed=True,
+        ).values_list(
+            "lesson_id",
+            flat=True,
+        )
+
+        completed_lessons = completed_lesson_ids.count()
+
+        progress_percentage = 0
+
+        if total_lessons > 0:
+            progress_percentage = round(
+                completed_lessons / total_lessons * 100
+            )
+
+        next_lesson = lessons.exclude(
+            id__in=completed_lesson_ids,
+        ).order_by("order").first()
+
+        enrolled_courses.append(
+            {
+                "course": course,
+                "completed_lessons": completed_lessons,
+                "total_lessons": total_lessons,
+                "progress_percentage": progress_percentage,
+                "next_lesson": next_lesson,
+            }
+        )
 
     context = {
-        "courses_count": courses_count,
-        "lessons_count": lessons_count,
+        "enrolled_courses": enrolled_courses,
+        "enrollments_count": enrollments.count(),
     }
 
-    return render(request, "accounts/profile.html", context)
-
+    return render(
+        request,
+        "accounts/profile.html",
+        context,
+    )
