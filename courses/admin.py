@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Course, Lesson, LessonProgress, LessonMaterial
-
+from .models import Course, Lesson, LessonProgress, LessonMaterial, LessonVideo, Exercise, Quiz, Question, Choice
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -9,6 +8,7 @@ class CourseAdmin(admin.ModelAdmin):
         "title",
         "level",
         "published",
+        "order",
         "created_at",
     )
 
@@ -91,3 +91,112 @@ class LessonMaterialAdmin(admin.ModelAdmin):
         "lesson__title",
         "lesson__course__title",
     )
+
+@admin.register(LessonVideo)
+class LessonVideoAdmin(admin.ModelAdmin):
+    list_display = (
+        "title",
+        "lesson",
+        "order",
+        "published",
+        "created_at",
+    )
+
+    list_filter = (
+        "published",
+        "lesson__course",
+        "lesson",
+    )
+
+    search_fields = (
+        "title",
+        "lesson__title",
+        "lesson__course__title",
+    )
+
+    ordering = (
+        "lesson",
+        "order",
+    )   
+
+@admin.register(Exercise)
+class ExerciseAdmin(admin.ModelAdmin):
+    list_display = (
+        "title",
+        "lesson",
+        "difficulty",
+        "order",
+        "published",
+    )
+
+    list_filter = (
+        "difficulty",
+        "published",
+        "lesson__course",
+    )
+
+    search_fields = (
+        "title",
+        "description",
+        "lesson__title",
+    )
+
+    ordering = (
+        "lesson",
+        "order",
+    )
+
+@admin.register(Quiz)
+class QuizAdmin(admin.ModelAdmin):
+    list_display = (
+        "title",
+        "lesson",
+        "published"
+    )
+
+    list_filter =(
+        "published",
+        "lesson__course",
+    )
+    
+    search_fields = (
+        "title",
+        "lesson__title",
+    )
+
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = (
+        "text",
+        "quiz",
+        "order",
+    )
+
+    list_filter = (
+        "quiz__lesson__course",
+        "quiz",
+    )
+
+    search_fields = (
+        "text",
+        "quiz__title",
+    )
+
+    ordering = (
+        "quiz",
+        "order",
+    )
+
+@admin.register(Choice)
+class ChoiceAdmin(admin.ModelAdmin):
+    list_display = (
+        "text",
+        "question",
+        "is_correct",
+    )
+
+    list_filter = (
+        "question__quiz",
+        "is_correct",
+    )
+    

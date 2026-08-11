@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from accounts.models import Enrollment
 
-from .models import Course, Lesson, LessonProgress
+from .models import Course, Lesson, LessonProgress, Quiz
 from django.utils import timezone
 
 
@@ -40,15 +40,15 @@ def course_detail(request, slug):
             course=course,
         ).exists()
 
-    completed_lessons = LessonProgress.objects.filter(
+        completed_lessons = LessonProgress.objects.filter(
             user=request.user,
             lesson__course=course,
             lesson__published=True,
             completed=True,
         ).count()
 
-    if total_lessons > 0:
-        progress_percentage = round(completed_lessons / total_lessons * 100)
+        if total_lessons > 0:
+           progress_percentage = round(completed_lessons / total_lessons * 100)
 
     context = {
         "course": course,
@@ -66,6 +66,12 @@ def course_detail(request, slug):
 
 
 def lesson_detail(request, course_slug, lesson_slug):
+    course = get_object_or_404(
+        Course,
+        slug=course_slug,
+        published=True,
+    )
+
     lesson = get_object_or_404(
         Lesson,
         course__slug=course_slug,
@@ -91,6 +97,7 @@ def lesson_detail(request, course_slug, lesson_slug):
         is_completed = LessonProgress.objects.filter(user=request.user, lesson=lesson, completed=True).exists()
 
     context = {
+        "course": course,
         "lesson": lesson,
         "previous_lesson": previous_lesson,
         "next_lesson": next_lesson,
@@ -169,4 +176,79 @@ def complete_lesson(request, course_slug, lesson_slug):
         "lesson_detail",
         course_slug=lesson.course.slug,
         lesson_slug=lesson.slug,
+    )
+
+def quiz_detail(request, course_slug, lesson_slug):
+    lesson = get_object_or_404(
+        Lesson,
+        course__slug=course_slug,
+        slug=lesson_slug,
+        published=True,
+        course__published=True,
+    )
+
+    quiz = get_object_or_404(
+        Quiz,
+        lesson=lesson,
+        published=True,
+    )
+
+    results = []
+    score = 0
+    total_questions = quiz.questions.count()
+    percentage = 0
+
+    if request.method == "POST":
+
+        for question in quiz.questions.all():
+
+            selected_choice_id = request.POST.get(
+                f"question_{question.id}"
+            )
+
+            selected_choice = None
+            is_correct = False
+
+            if selected_choice_id:
+                selected_choice = question.choices.filter(
+                    id=selected_choice_id
+                ).first()
+
+                if selected_choice:
+                    is_correct = selected_choice.is_correct
+
+                    if is_correct:
+                        score += 1
+
+            correct_choice = question.choices.filter(
+                is_correct=True
+            ).first()
+
+            results.append(
+                {
+                    "question": question,
+                    "selected_choice": selected_choice,
+                    "correct_choice": correct_choice,
+                    "is_correct": is_correct,
+                }
+            )
+
+        if total_questions > 0:
+            percentage = round(
+                score / total_questions * 100
+            )
+
+    context = {
+        "lesson": lesson,
+        "quiz": quiz,
+        "results": results,
+        "score": score,
+        "total_questions": total_questions,
+        "percentage": percentage,
+    }
+
+    return render(
+        request,
+        "courses/quiz_detail.html",
+        context,
     )

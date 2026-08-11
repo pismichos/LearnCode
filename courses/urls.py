@@ -7,6 +7,7 @@ urlpatterns = [
     path("<slug:slug>/enroll/",views.enroll_course,name="enroll_course",),
     path("<slug:slug>/unenroll/",views.unenroll_course,name="unenroll_course", ),
     path("<slug:course_slug>/<slug:lesson_slug>/complete/",views.complete_lesson,name="complete_lesson",),
+    path("<slug:course_slug>/<slug:lesson_slug>/quiz/",views.quiz_detail,name="quiz_detail",),
     path("<slug:course_slug>/<slug:lesson_slug>/",views.lesson_detail,name="lesson_detail",),
     path("<slug:slug>/",views.course_detail,name="course_detail",),   
     
