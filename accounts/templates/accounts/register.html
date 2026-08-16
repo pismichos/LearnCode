@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Εγγραφή | LearnCode
+{% endblock %}
+
+{% block content %}
+
+<section class="py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-5">
+            <div class="card border-0 shadow">
+                <div class="card-body p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <div class="fs-1 mb-2">
+                            👤
+                        </div>
+                        <h1 class="h3 fw-bold mb-2">
+                            Δημιουργία λογαριασμού
+                        </h1>
+                        <p class="text-muted mb-0">
+                            Δημιούργησε τον λογαριασμό σου και ξεκίνα να μαθαίνεις.
+                        </p>
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+                        <div class="mb-3">
+                            <label
+                                for="{{ form.username.id_for_label }}"
+                                class="form-label fw-semibold">
+                                Όνομα χρήστη
+                            </label>
+                            <input
+                                type="text"
+                                name="{{ form.username.name }}"
+                                id="{{ form.username.id_for_label }}"
+                                class="form-control"
+                                value="{{ form.username.value|default:'' }}"
+                                required>
+                            {% for error in form.username.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+
+                            <label
+                                for="{{ form.password1.id_for_label }}"
+                                class="form-label fw-semibold">
+                                Κωδικός πρόσβασης
+                            </label>
+                            <div class="input-group">
+                                <input
+                                    type="password"
+                                    name="{{ form.password1.name }}"
+                                    id="{{ form.password1.id_for_label }}"
+                                    class="form-control"
+                                    required>
+                                <button
+                                    class="btn btn-outline-secondary"
+                                    type="button"
+                                    onclick="togglePassword('{{ form.password1.id_for_label }}', this)"
+                                    aria-label="Εμφάνιση κωδικού">👁
+                                </button>
+                            </div>
+                            {% for error in form.password1.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    <div class="mb-4">
+                        <label
+                            for="{{ form.password2.id_for_label }}"
+                            class="form-label fw-semibold">
+                            Επιβεβαίωση κωδικού
+                        </label>
+                        <div class="input-group">
+                            <input
+                                type="password"
+                                name="{{ form.password2.name }}"
+                                id="{{ form.password2.id_for_label }}"
+                                class="form-control"
+                                required>
+                            <button
+                                class="btn btn-outline-secondary"
+                                type="button"
+                                onclick="togglePassword('{{ form.password2.id_for_label }}', this)"
+                                aria-label="Εμφάνιση κωδικού">👁
+                            </button>
+                        </div>
+                        {% for error in form.password2.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                        <div class="alert alert-light border small">
+                            <strong>
+                                Ο κωδικός πρέπει:
+                            </strong>
+                            <ul class="mb-0 mt-2">
+                                <li>να έχει τουλάχιστον 8 χαρακτήρες,</li>
+                                <li>να μην είναι πολύ συνηθισμένος,</li>
+                                <li>να μην αποτελείται μόνο από αριθμούς.</li>
+                            </ul>
+                        </div>
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100 py-2">
+                            Δημιουργία λογαριασμού
+                        </button>
+                    </form>
+                    <hr class="my-4">
+                    <p class="text-center text-muted mb-0">
+                        Έχεις ήδη λογαριασμό;
+                        <a href="{% url 'login' %}"
+                            class="text-decoration-none fw-semibold">
+                            Σύνδεση
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function togglePassword(fieldId, button) {
+        const passwordField = document.getElementById(fieldId);
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            button.textContent = "🙈";
+            button.setAttribute("aria-label", "Απόκρυψη κωδικού");
+        } else {
+            passwordField.type = "password";
+            button.textContent = "👁";
+            button.setAttribute("aria-label", "Εμφάνιση κωδικού");
+        }
+    }
+</script>
+{% endblock %}
