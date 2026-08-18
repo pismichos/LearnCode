@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Course, Lesson, LessonProgress, LessonMaterial, LessonVideo, Exercise, Quiz, Question, Choice
+from .models import Course, Lesson, LessonProgress, LessonMaterial, LessonVideo, Exercise, Quiz, Question, Choice, QuizAttempt
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -200,3 +200,21 @@ class ChoiceAdmin(admin.ModelAdmin):
         "is_correct",
     )
     
+@admin.register(QuizAttempt)
+class QuizAttemptAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        "quiz",
+        "score",
+        "total_questions",
+        "percentage",
+        "completed_at",
+    )
+    list_filter = (
+        "quiz",
+        "completed_at",
+    )
+    search_fields = (
+        "user__username",
+        "quiz__title",
+    )

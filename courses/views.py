@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from accounts.models import Enrollment
 
-from .models import Course, Lesson, LessonProgress, Quiz
+from .models import Course, Lesson, LessonProgress, Quiz, QuizAttempt
 from django.utils import timezone
 
 
@@ -238,6 +238,15 @@ def quiz_detail(request, course_slug, lesson_slug):
                 score / total_questions * 100
             )
 
+        if request.user.is_authenticated:
+            QuizAttempt.objects.create(
+            user=request.user,
+            quiz=quiz,
+            score=score,
+            total_questions=total_questions,
+            percentage=percentage,
+    )
+
     context = {
         "lesson": lesson,
         "quiz": quiz,
@@ -252,3 +261,77 @@ def quiz_detail(request, course_slug, lesson_slug):
         "courses/quiz_detail.html",
         context,
     )
+
+@login_required
+def profil(request):
+    enrollments = Enrollment.objects.filter(
+        user=request.user,
+        course_published=True,
+    ).select_related("course")
+
+    enrolled_courses = []
+
+    total_completed_lessons = 0
+
+    for enrolment in enrollments:
+        course = enrollments.courses
+
+        lessons = course.lessons.filter(published=True,)
+
+        total_lessons = lessons.count()
+
+        completed_lesson_ids = LessonProgress.objects.filter(
+            user=request.user,
+            lesson__course=course,
+            lesson__published=True,
+            completed=True,
+            ).values_list(
+                "lesson_id",
+                flat=True,
+            )
+        completed_lessons = completed_lesson_ids.count()
+
+        total_completed_lessons += completed_lessons
+
+        progress_percentage = 0
+
+        if total_lessons > 0:
+            progress_percentage = round(
+                completed_lessons / total_lessons * 100
+            )
+
+        next_lesson = lessons.exclude(
+            id__in=completed_lesson_ids,
+        ).order_by("order").first()
+
+        enrolled_courses.append(
+            {
+                "course": course,
+                "completed_lessons": completed_lessons,
+                "total_lessons": total_lessons,
+                "progress_percentage": progress_percentage,
+                "next_lesson": next_lesson,
+            }
+        )
+
+    quiz_attempts = QuizAttempt.objects.filter(
+        user=request.user,
+    ).select_related(
+        "quiz",
+        "quiz__lesson",
+        "quiz__lesson__course",
+    ).order_by("-completed_at")
+
+    context = {
+        "enrolled_courses": enrolled_courses,
+        "enrollments_count": enrollments.count(),
+        "total_completed_lessons": total_completed_lessons,
+        "quiz_attempts": quiz_attempts[:10],
+        "quiz_attempts_count": quiz_attempts.count(),
+    }
+
+    return render(
+        request,
+        "accounts/profile.html",
+        context,
+    )   

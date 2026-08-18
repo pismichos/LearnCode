@@ -229,3 +229,45 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.text
+
+from django.conf import settings
+
+
+class QuizAttempt(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="quiz_attempts",
+    )
+
+    quiz = models.ForeignKey(
+        Quiz,
+        on_delete=models.CASCADE,
+        related_name="attempts",
+    )
+
+    score = models.PositiveIntegerField(
+        default=0,
+    )
+
+    total_questions = models.PositiveIntegerField(
+        default=0,
+    )
+
+    percentage = models.PositiveIntegerField(
+        default=0,
+    )
+
+    completed_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    class Meta:
+        ordering = ["-completed_at"]
+
+    def __str__(self):
+        return (
+            f"{self.user.username} - "
+            f"{self.quiz.title} - "
+            f"{self.percentage}%"
+        )

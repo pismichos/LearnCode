@@ -1,103 +1,230 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Το προφίλ μου | LearnCode
+    Προφίλ Μαθητή | LearnCode
 {% endblock %}
 
 {% block content %}
 
 <section class="py-5">
 
-    <div class="mb-5">
+    <!-- ============================= -->
+    <!-- ΣΤΟΙΧΕΙΑ ΜΑΘΗΤΗ -->
+    <!-- ============================= -->
 
-        <h1 class="fw-bold">
-            👤 Dashboard
-        </h1>
+    <div class="card border-0 shadow-sm mb-5">
 
-        <p class="lead mb-1">
-            Καλώς ήρθες,
-            <strong>{{ user.username }}</strong>!
-        </p>
+        <div class="card-body p-4">
 
-        <p class="text-muted">
-            Είσαι εγγεγραμμένος σε
-            {{ enrollments_count }}
-            μαθήματα.
-        </p>
+            <div class="row align-items-center">
+
+                <div class="col-md-8">
+
+                    <h1 class="fw-bold mb-2">
+                        👤 Προφίλ Μαθητή
+                    </h1>
+
+                    <p class="mb-1">
+                        <strong>Username:</strong>
+                        {{ user.username }}
+                    </p>
+
+                    <p class="mb-0">
+                        <strong>Email:</strong>
+                        {{ user.email|default:"Δεν έχει δηλωθεί email" }}
+                    </p>
+
+                </div>
+
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+
+                    <a
+                        href="{% url 'course_list' %}"
+                        class="btn btn-outline-primary"
+                    >
+                        Προβολή μαθημάτων
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
-    <h2 class="fw-bold mb-4">
-        📚 Τα μαθήματά μου
-    </h2>
 
-    <div class="row g-4">
+    <!-- ============================= -->
+    <!-- ΣΥΝΟΛΙΚΑ ΣΤΑΤΙΣΤΙΚΑ -->
+    <!-- ============================= -->
 
-        {% for item in enrolled_courses %}
+    <div class="row g-4 mb-5">
 
-            <div class="col-md-6">
+        <div class="col-md-4">
 
-                <div class="card h-100 shadow-sm">
+            <div class="card h-100 border-0 shadow-sm">
 
-                    <div class="card-body d-flex flex-column">
+                <div class="card-body text-center">
 
-                        <span class="badge bg-primary align-self-start mb-3">
-                            {{ item.course.get_level_display }}
-                        </span>
+                    <div class="fs-2 mb-2">
+                        📚
+                    </div>
 
-                        <h3 class="h4 fw-bold">
-                            {{ item.course.title }}
-                        </h3>
+                    <h2 class="h5 fw-bold">
+                        Μαθήματα
+                    </h2>
 
-                        <p class="text-muted">
-                            {{ item.course.description|truncatewords:20 }}
-                        </p>
+                    <p class="display-6 fw-bold text-primary mb-0">
+                        {{ enrollments_count }}
+                    </p>
 
-                        <div class="mt-auto">
+                </div>
 
-                            <div class="d-flex justify-content-between mb-2">
+            </div>
 
-                                <span class="fw-semibold">
-                                    Πρόοδος
-                                </span>
+        </div>
 
-                                <span>
-                                    {{ item.completed_lessons }}
-                                    /
-                                    {{ item.total_lessons }}
-                                </span>
 
-                            </div>
+        <div class="col-md-4">
 
-                            <div class="progress mb-3">
+            <div class="card h-100 border-0 shadow-sm">
+
+                <div class="card-body text-center">
+
+                    <div class="fs-2 mb-2">
+                        ✅
+                    </div>
+
+                    <h2 class="h5 fw-bold">
+                        Ολοκληρωμένες ενότητες
+                    </h2>
+
+                    <p class="display-6 fw-bold text-success mb-0">
+                        {{ total_completed_lessons }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card h-100 border-0 shadow-sm">
+
+                <div class="card-body text-center">
+
+                    <div class="fs-2 mb-2">
+                        🧠
+                    </div>
+
+                    <h2 class="h5 fw-bold">
+                        Quiz Attempts
+                    </h2>
+
+                    <p class="display-6 fw-bold text-info mb-0">
+                        {{ quiz_attempts_count }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- ΤΑ ΜΑΘΗΜΑΤΑ ΜΟΥ -->
+    <!-- ============================= -->
+
+    <div class="mb-5">
+
+        <h2 class="fw-bold mb-4">
+            📚 Τα μαθήματά μου
+        </h2>
+
+        <div class="row g-4">
+
+            {% for item in enrolled_courses %}
+
+                <div class="col-md-6">
+
+                    <div class="card h-100 border-0 shadow-sm">
+
+                        <div class="card-body d-flex flex-column">
+
+                            <span class="badge bg-primary align-self-start mb-3">
+                                {{ item.course.get_level_display }}
+                            </span>
+
+                            <h3 class="h4 fw-bold">
+                                {{ item.course.title }}
+                            </h3>
+
+                            <p class="text-muted">
+                                {{ item.course.description|truncatewords:25 }}
+                            </p>
+
+
+                            <!-- Progress -->
+
+                            <div class="mt-auto">
+
+                                <div class="d-flex justify-content-between mb-2">
+
+                                    <span class="fw-semibold">
+                                        Πρόοδος
+                                    </span>
+
+                                    <span>
+                                        {{ item.completed_lessons }}
+                                        /
+                                        {{ item.total_lessons }}
+                                    </span>
+
+                                </div>
+
                                 <div
-                                    class="progress-bar"
+                                    class="progress mb-3"
                                     role="progressbar"
-                                    style="width: {{ item.progress_percentage|default:"0" }}%;"
-                                    aria-valuenow="{{ item.progress_percentage|default:"0" }}"
+                                    aria-valuenow="{{ item.progress_percentage }}"
                                     aria-valuemin="0"
                                     aria-valuemax="100"
                                 >
-                                    {{ item.progress_percentage }}%
+
+                                    <div
+                                        class="progress-bar"
+                                        style="width: {{ item.progress_percentage }}%;"
+                                    >
+                                        {{ item.progress_percentage }}%
+                                    </div>
+
                                 </div>
+
+
+                                {% if item.next_lesson %}
+
+                                    <a
+                                        href="{% url 'lesson_detail' item.course.slug item.next_lesson.slug %}"
+                                        class="btn btn-primary"
+                                    >
+                                        ▶ Συνέχισε:
+                                        {{ item.next_lesson.title }}
+                                    </a>
+
+                                {% else %}
+
+                                    <div class="alert alert-success mb-0">
+                                        🏆 Ολοκλήρωσες το μάθημα!
+                                    </div>
+
+                                {% endif %}
+
                             </div>
-
-                            {% if item.next_lesson %}
-
-                                <a
-                                    href="{% url 'lesson_detail' item.course.slug item.next_lesson.slug %}"
-                                    class="btn btn-primary"
-                                >
-                                    ▶ Συνέχεια: {{ item.next_lesson.title }}
-                                </a>
-
-                            {% else %}
-
-                                <div class="alert alert-success mb-0">
-                                    🏆 Ολοκλήρωσες το μάθημα!
-                                </div>
-
-                            {% endif %}
 
                         </div>
 
@@ -105,28 +232,130 @@
 
                 </div>
 
-            </div>
+            {% empty %}
 
-        {% empty %}
+                <div class="col-12">
 
-            <div class="col-12">
+                    <div class="alert alert-info">
 
-                <div class="alert alert-info">
+                        Δεν έχεις εγγραφεί ακόμη σε κάποιο μάθημα.
 
-                    Δεν έχεις εγγραφεί ακόμη σε κάποιο μάθημα.
+                        <a
+                            href="{% url 'course_list' %}"
+                            class="alert-link"
+                        >
+                            Δες τα διαθέσιμα μαθήματα
+                        </a>
 
-                    <a
-                        href="{% url 'course_list' %}"
-                        class="alert-link"
-                    >
-                        Δες τα διαθέσιμα μαθήματα
-                    </a>
+                    </div>
 
                 </div>
 
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- QUIZ ΑΠΟΤΕΛΕΣΜΑΤΑ -->
+    <!-- ============================= -->
+
+    <div>
+
+        <h2 class="fw-bold mb-4">
+            🧠 Αποτελέσματα Quiz
+        </h2>
+
+        {% if quiz_attempts %}
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+                            <th>Μάθημα</th>
+                            <th>Ενότητα</th>
+                            <th>Quiz</th>
+                            <th>Score</th>
+                            <th>Ποσοστό</th>
+                            <th>Ημερομηνία</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for attempt in quiz_attempts %}
+
+                            <tr>
+
+                                <td>
+                                    {{ attempt.quiz.lesson.course.title }}
+                                </td>
+
+                                <td>
+                                    {{ attempt.quiz.lesson.title }}
+                                </td>
+
+                                <td>
+                                    {{ attempt.quiz.title }}
+                                </td>
+
+                                <td>
+                                    {{ attempt.score }}
+                                    /
+                                    {{ attempt.total_questions }}
+                                </td>
+
+                                <td>
+
+                                    {% if attempt.percentage >= 80 %}
+
+                                        <span class="badge bg-success">
+                                            {{ attempt.percentage }}%
+                                        </span>
+
+                                    {% elif attempt.percentage >= 50 %}
+
+                                        <span class="badge bg-warning text-dark">
+                                            {{ attempt.percentage }}%
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-danger">
+                                            {{ attempt.percentage }}%
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+                                    {{ attempt.completed_at|date:"d/m/Y H:i" }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
             </div>
 
-        {% endfor %}
+        {% else %}
+
+            <div class="alert alert-info">
+                Δεν έχεις ολοκληρώσει ακόμη κάποιο Quiz.
+            </div>
+
+        {% endif %}
 
     </div>
 

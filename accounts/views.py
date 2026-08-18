@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from courses.models import Course, Lesson, LessonProgress
 
 from .models import Enrollment
+from .forms import RegisterForm
+
 
 @login_required
 def profile(request):
@@ -70,7 +71,7 @@ def profile(request):
 def register(request):
 
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = RegisterForm(request.POST)
 
         if form.is_valid():
             form.save()
@@ -78,7 +79,7 @@ def register(request):
             return redirect("login")
 
     else:
-        form = UserCreationForm()
+        form = RegisterForm()
 
     context = {
         "form": form,
