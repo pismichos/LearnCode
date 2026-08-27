@@ -44,18 +44,74 @@
    Navigation
 ------------------------------ */
 
+.navbar {
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
+.navbar-brand {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
 .navbar .nav-link {
-    color: #ffffff;
+    color: rgba(255, 255, 255, 0.85);
     font-weight: 500;
-    transition: 0.3s;
+    margin: 0 4px;
+    padding: 8px 12px !important;
+    border-radius: 8px;
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease;
 }
 
 .navbar .nav-link:hover {
-    color: #0d6efd;
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.15);
 }
 
 .navbar .nav-link.active {
-    color: #0d6efd !important;
-    font-weight: bold;
-    border-bottom: 3px solid #0d6efd;
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.20);
+    font-weight: 600;
+}
+
+.course-card {
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.25) !important;
+    border: 2px solid #0d6efd !important;
+}
+
+/* -----------------------------
+   StudyCode Logo
+------------------------------ */
+
+.navbar-brand {
+    padding: 0;
+    margin-right: 20px;
+}
+
+.navbar-brand .studycode-logo {
+    display: block;
+
+    height: 55px !important;
+    width: auto !important;
+
+    max-width: 220px !important;
+    object-fit: contain;
+}
+
+@media (max-width: 768px) {
+
+    .navbar-brand .studycode-logo {
+        height: 42px !important;
+        max-width: 170px !important;
+    }
+
 }

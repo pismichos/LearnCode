@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{% block title %}LearnCode{% endblock %}</title>
+    <title>{% block title %}StudyCode{% endblock %}</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -27,14 +27,22 @@
 
     <div class="container">
 
-        <a class="navbar-brand" href="{% url 'home' %}">         
-            💻 LearnCode
+        <a class="navbar-brand d-flex align-items-center"
+           href="{% url 'home' %}">
+
+            <img
+                src="{% static 'images/studycode-logo.png' %}"
+                alt="StudyCode"
+                class="studycode-logo">
         </a>
 
         <button class="navbar-toggler"
                 type="button"
                 data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
 
             <span class="navbar-toggler-icon"></span>
 
@@ -42,7 +50,7 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
 
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto align-items-lg-center">
 
                 <li class="nav-item">
                     <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">
@@ -59,7 +67,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="#">Ασκήσεις</a>
-                </li>
+                </li>   
 
                 <li class="nav-item">
                     <a class="nav-link" href="#">Βίντεο</a>
@@ -121,17 +129,49 @@
 
 </nav>
 
-<div class="container mt-5">
+{% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+            <div 
+                 class="alert
+                       {% if message.tags == 'success' %}alert-success{% endif %}
+                       {% if message.tags == 'error' %}alert-danger{% endif %}
+                       {% if message.tags == 'warning' %}alert-warning{% endif %}
+                       {% if message.tags == 'info' %}alert-info{% endif %}
+                       alert-dismissible fade show"
+                role="alert"
+            >
+                {{message}}
+                <button 
+                    type = "button"
+                    class = "btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+<main class="container py-4 py-md-5">
 
     {% block content %}
     {% endblock %}
 
-</div>
+</main>
 
-<footer class="bg-dark text-white text-center p-4 mt-5">
-
-    © 2026 LearnCode
-
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+            <p class="mb-0">
+                © 2026 StudyCode
+            </p>
+            <p class="mb-0 text-white-50">
+                Μάθε Πληροφορική – Χτίσε το μέλλον σου
+            </p>
+        </div>
+    </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>

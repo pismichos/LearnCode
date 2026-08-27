@@ -1,42 +1,64 @@
 {% extends "base.html" %}
 
-{% block title %}LearnCode{% endblock %}
+{% block title %}
+    StudyCode
+{% endblock %}
 
 {% block content %}
 
-<section class="hero text-center py-5">
+<section class="hero text-center py-4 py-md-5">
 
-    <h1 class="display-3 fw-bold">
-        LearnCode
-    </h1>
+    <div class="mx-auto" style="max-width: 850px;">
 
-    <p class="lead mt-4">
-        Μάθε Python, Web Development και Προγραμματισμό
-        με σύγχρονες μεθόδους διδασκαλίας.
-    </p>
+        <h1 class="display-4 display-md-3 fw-bold">
+            StudyCode
+        </h1>
 
-    <div class="mt-4">
+        <p class="lead mt-3 mt-md-4">
+            Μάθε Python, Web Development και Προγραμματισμό
+            με σύγχρονες μεθόδους διδασκαλίας.
+        </p>
 
-        <a href="#" class="btn btn-primary btn-lg me-3">
-            🚀 Ξεκίνα σήμερα
-        </a>
+        <div
+            class="d-flex flex-column flex-sm-row
+                   justify-content-center gap-3 mt-4"
+        >
 
-        <a href="#" class="btn btn-outline-primary btn-lg">
-            📩 Επικοινωνία
-        </a>
+            <a
+                href="{% url 'course_list' %}"
+                class="btn btn-primary btn-lg"
+            >
+                🚀 Ξεκίνα σήμερα
+            </a>
+
+            <a
+                href="#"
+                class="btn btn-outline-primary btn-lg"
+            >
+                📩 Επικοινωνία
+            </a>
+
+        </div>
 
     </div>
 
 </section>
 
-<hr class="my-5">
 
-<div class="row g-4">
+<hr class="my-4 my-md-5">
 
-    <div class="col-md-4">
 
-        <a href="{% url 'panelladikes' %}" class="text-decoration-none text-dark">
-            <div class="card h-100 shadow-sm">
+<section>
+
+    <div class="row g-4">
+
+    <div class="col-12 col-md-4">
+
+        <a
+            href="{% url 'panelladikes' %}"
+            class="text-decoration-none text-dark"
+        >
+            <div class="card h-100 shadow-sm course-card">
 
                 <div class="card-body text-center">
 
@@ -44,30 +66,35 @@
                         🎓
                     </div>
 
-                <h3>
-                    Πανελλήνιες
-                </h3>
+                    <h3>
+                        Πανελλήνιες
+                    </h3>
 
-                <p class="mb-0">
-                    Προετοιμασία για το μάθημα της Πληροφορικής.
-                </p>
+                    <p class="mb-0">
+                        Προετοιμασία για το μάθημα της Πληροφορικής.
+                    </p>
+
+                </div>
 
             </div>
-
-        </div>
-    </a>
+        </a>
 
     </div>
 
-    <div class="col-md-4">
+
+    <div class="col-12 col-md-4">
 
         <div class="card h-100 shadow">
 
             <div class="card-body text-center">
 
-                <h2>🐍</h2>
+                <h2>
+                    🐍
+                </h2>
 
-                <h4>Python</h4>
+                <h4>
+                    Python
+                </h4>
 
                 <p>
                     Από τα πρώτα βήματα μέχρι προχωρημένο επίπεδο.
@@ -79,15 +106,20 @@
 
     </div>
 
-    <div class="col-md-4">
+
+    <div class="col-12 col-md-4">
 
         <div class="card h-100 shadow">
 
             <div class="card-body text-center">
 
-                <h2>🌐</h2>
+                <h2>
+                    🌐
+                </h2>
 
-                <h4>Web Development</h4>
+                <h4>
+                    Web Development
+                </h4>
 
                 <p>
                     HTML, CSS, JavaScript και Django.
@@ -99,8 +131,8 @@
 
     </div>
 
-    
-
 </div>
+
+</section>
 
 {% endblock %}

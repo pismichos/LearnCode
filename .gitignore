@@ -1,9 +1,12 @@
 # Virtual Environment
 .venv/
+venv/
 
 # Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
 # SQLite
 db.sqlite3
@@ -11,11 +14,18 @@ db.sqlite3
 # Media uploads
 media/
 
+# Environment variables / secrets
+.env
+.env.*
+
 # VS Code
 .vscode/
 
-# Environment variables
-.env
+# PyCharm
+.idea/
+
+# Windows
+Thumbs.db
 
 # macOS
 .DS_Store

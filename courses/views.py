@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib import messages
 
 from accounts.models import Enrollment
 
@@ -65,13 +66,8 @@ def course_detail(request, slug):
     )
 
 
+@login_required
 def lesson_detail(request, course_slug, lesson_slug):
-    course = get_object_or_404(
-        Course,
-        slug=course_slug,
-        published=True,
-    )
-
     lesson = get_object_or_404(
         Lesson,
         course__slug=course_slug,
@@ -79,6 +75,22 @@ def lesson_detail(request, course_slug, lesson_slug):
         published=True,
         course__published=True,
     )
+
+    is_enrolled = Enrollment.objects.filter(
+        user=request.user,
+        course=lesson.course,
+    ).exists()
+
+    if not is_enrolled:
+        messages.warning(
+            request,
+            "Πρέπει πρώτα να εγγραφείς στο μάθημα."
+        )
+
+        return redirect(
+            "course_detail",
+            slug=lesson.course.slug,
+        )
 
     previous_lesson = Lesson.objects.filter(
         course=lesson.course,
@@ -92,12 +104,13 @@ def lesson_detail(request, course_slug, lesson_slug):
         order__gt=lesson.order,
     ).order_by("order").first()
 
-    is_completed = False
-    if request.user.is_authenticated:
-        is_completed = LessonProgress.objects.filter(user=request.user, lesson=lesson, completed=True).exists()
+    is_completed = LessonProgress.objects.filter(
+        user=request.user,
+        lesson=lesson,
+        completed=True,
+    ).exists()
 
     context = {
-        "course": course,
         "lesson": lesson,
         "previous_lesson": previous_lesson,
         "next_lesson": next_lesson,
@@ -120,10 +133,22 @@ def enroll_course(request, slug):
     )
 
     if request.method == "POST":
-        Enrollment.objects.get_or_create(
+
+        enrollment, created = Enrollment.objects.get_or_create(
             user=request.user,
             course=course,
         )
+
+        if created:
+            messages.success(
+                request,
+                "Εγγράφηκες επιτυχώς στο μάθημα!"
+            )
+        else:
+            messages.info(
+                request,
+                "Είσαι ήδη εγγεγραμμένος σε αυτό το μάθημα."
+            )
 
     return redirect(
         "course_detail",
@@ -144,6 +169,11 @@ def unenroll_course(request, slug):
             course=course,
         ).delete()
 
+        messages.success(
+        request,
+        "Η απεγγραφή από το μάθημα ολοκληρώθηκε."
+)
+
     return redirect(
         "course_detail",
         slug=course.slug,
@@ -160,16 +190,25 @@ def complete_lesson(request, course_slug, lesson_slug):
     )
 
     if request.method == "POST":
+
         progress, created = LessonProgress.objects.get_or_create(
             user=request.user,
             lesson=lesson,
         )
 
-        if not progress.completed:
+        if progress.completed:
+            messages.info(
+                request,
+                "Η ενότητα είναι ήδη ολοκληρωμένη."
+            )
+        else:
             progress.completed = True
             progress.completed_at = timezone.now()
-            progress.save(
-                update_fields=["completed", "completed_at"]
+            progress.save()
+
+            messages.success(
+                request,
+                "Η ενότητα σημειώθηκε ως ολοκληρωμένη!"
             )
 
     return redirect(
@@ -178,6 +217,7 @@ def complete_lesson(request, course_slug, lesson_slug):
         lesson_slug=lesson.slug,
     )
 
+@login_required
 def quiz_detail(request, course_slug, lesson_slug):
     lesson = get_object_or_404(
         Lesson,

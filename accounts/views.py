@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from courses.models import Course, Lesson, LessonProgress
+from django.contrib import messages
 
 from .models import Enrollment
 from .forms import RegisterForm
@@ -75,7 +76,10 @@ def register(request):
 
         if form.is_valid():
             form.save()
-
+            messages.success(
+            request,
+            "Ο λογαριασμός σου δημιουργήθηκε επιτυχώς. Μπορείς τώρα να συνδεθείς."
+)
             return redirect("login")
 
     else:
