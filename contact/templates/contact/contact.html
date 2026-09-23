@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}
+Επικοινωνία | StudyCode
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+
+        <div class="text-center mb-5">
+            <h1 class="fw-bold">Επικοινωνία</h1>
+
+            <p class="text-muted mt-3">
+                Έχεις κάποια ερώτηση σχετικά με τα μαθήματα;
+                Συμπλήρωσε τη φόρμα και θα επικοινωνήσω μαζί σου.
+            </p>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4 p-md-5">
+
+                <form method="post">
+
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                        <div class="mb-4">
+
+                            <label for="{{ field.id_for_label }}"
+                                   class="form-label fw-semibold">
+                                {{ field.label }}
+                            </label>
+
+                            {{ field }}
+
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    {% endfor %}
+
+                    <div class="d-grid">
+                        <button type="submit"
+                                class="btn btn-primary btn-lg">
+                            Αποστολή μηνύματος
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <p class="text-muted mb-1">
+                Εναλλακτικά, μπορείς να επικοινωνήσεις μέσω email:
+            </p>
+
+            <a href="mailto:info@studycode.gr"
+               class="text-decoration-none">
+                info@studycode.gr
+            </a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
