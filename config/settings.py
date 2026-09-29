@@ -21,7 +21,7 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get(
     "DJANGO_DEBUG",
-    "False",
+    "True",
 ) == "True"
 
 ALLOWED_HOSTS = [
@@ -44,9 +44,9 @@ CSRF_TRUSTED_ORIGINS = [
 
 if not DEBUG:
 
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
 
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     "courses",
     "accounts",
     "contact",
+    "exercises",
 ]
 
 
